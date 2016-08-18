@@ -1,6 +1,8 @@
 # RSPEC: Framework para pruebas usando el lenguaje Ruby
 require "rspec"
 require "selenium-webdriver"
+require 'net/http'
+require 'json'
 
 RSpec.describe "Cita" do
 
@@ -127,6 +129,22 @@ RSpec.describe "Cita" do
     # Cierra el navegador
     sleep(5)
     driver.quit
+  end
+  
+  
+  # Caso de Prueba consumiendo un API
+  # API Usado: https://jsonplaceholder.typicode.com
+
+  it "consumir api de prueba y verificar datos de un usuario" do
+    
+    url = "https://jsonplaceholder.typicode.com/users"
+    uri = URI(url)
+    respuesta_api = Net::HTTP.get(uri)
+    datos_json = JSON.parse(respuesta_api)
+
+    nombre = datos_json.first["name"];
+
+    expect(nombre).to eq "Leanne Graham"
   end
 
 end
